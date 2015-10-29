@@ -3,7 +3,7 @@
 (defvar +crlf+ #.(format nil "~C~C" #\return #\linefeed))
 
 ;;; from: https://github.com/fukamachi/dexador/blob/master/src/util.lisp
-(defun make-boundary (&optional (length 12))
+(defun make-boundary (&optional (length 24))
   (declare (optimize (speed 3) (safety 0) (space 0) (compilation-speed 0))
            (type fixnum length))
   (let ((result (make-string length)))
