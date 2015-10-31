@@ -27,6 +27,16 @@
 	 collect (crlf-stream) into streams
 	 finally (return (nconc streams (list (boundary-tail boundary)))))))
 
+;;; multipart stream
+
+(defclass multipart-stream (clean-composite-stream fundamental-input-stream)
+  ())
+
+(defmethod stream-element-type ((stream multipart-stream))
+  '(unsigned-byte 8))
+
 (defun make-multipart-stream (boundary &rest objects)
   (let ((constituent-streams (apply #'make-multipart-constituent-streams boundary objects)))
-    (apply #'make-concatenated-stream constituent-streams)))
+    (make-instance 'multipart-stream
+                   :constituent-streams constituent-streams
+                   :composite-stream (apply #'make-concatenated-stream constituent-streams))))

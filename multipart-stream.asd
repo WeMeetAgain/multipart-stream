@@ -5,6 +5,7 @@
   :description "A simple multipart stream."
   :author "Cayman Nava"
   :license "MIT"
+  :depends-on (:clean-composite-stream)
   :components ((:module "src"
         :serial t
 		:components
