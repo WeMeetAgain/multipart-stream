@@ -4,7 +4,8 @@
   (:use #:cl #:trivial-gray-streams)
   (:export #:multipart-headers
            #:multipart-stream
-	   #:multipart-use-headers-p
+           #:multipart-use-headers-p
            #:multipart-headers-stream
+           #:make-multipart-constituent-streams
            #:make-multipart-stream
            #:make-boundary))

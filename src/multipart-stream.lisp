@@ -16,13 +16,17 @@
 			       do (format stream "~A: ~A~A" key value +crlf+))
 			    (format stream "~A" +crlf+)))))
 
+(defun make-multipart-constituent-streams (boundary &rest objects)
+  (if (null objects)
+      (list (boundary-tail boundary))
+      (loop for object in objects
+	 collect (boundary-separator boundary) into streams
+	 if (multipart-use-headers-p object)
+	 collect (multipart-headers-stream object) into streams
+	 collect (multipart-stream object) into streams
+	 collect (crlf-stream) into streams
+	 finally (return (nconc streams (list (boundary-tail boundary)))))))
+
 (defun make-multipart-stream (boundary &rest objects)
-  (apply #'make-concatenated-stream
-         (if (null objects)
-	     (list (boundary-tail boundary))
-           (loop for object in objects
-	      collect (boundary-separator boundary) into streams
-	      if (multipart-use-headers-p object)
-	      collect (multipart-headers-stream object) into streams
-	      collect (multipart-stream object) into streams
-	      finally (return (nconc streams (list (boundary-tail boundary))))))))
+  (let ((constituent-streams (apply #'make-multipart-constituent-streams boundary objects)))
+    (apply #'make-concatenated-stream constituent-streams)))
