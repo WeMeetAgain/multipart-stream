@@ -1,4 +1,4 @@
-(cl:in-package :multipart-stream)
+(cl:in-package #:multipart-stream)
 
 (defgeneric multipart-headers (object))
 
