@@ -18,9 +18,16 @@
 (defun boundary-separator (boundary)
   (declare (optimize (speed 3) (safety 0) (space 0) (compilation-speed 0))
            (type fixnum boundary))
-    (make-string-input-stream (format nil "--~A~A" boundary +crlf+)))
+  (make-instance 'fast-io:fast-input-stream
+		 :vector (babel:string-to-octets (format nil "--~A~A" boundary +crlf+))))
 
 (defun boundary-tail (boundary)
   (declare (optimize (speed 3) (safety 0) (space 0) (compilation-speed 0))
            (type fixnum boundary))
-    (make-string-input-stream (format nil "--~A--" boundary)))
+  (make-instance 'fast-io:fast-input-stream
+		 :vector (babel:string-to-octets (format nil "--~A--~A" boundary +crlf+))))
+
+(defun crlf-stream ()
+  (declare (optimize (speed 3) (safety 0) (space 0) (compilation-speed 0)))
+  (make-instance 'fast-io:fast-input-stream
+		 :vector (babel:string-to-octets (format nil "~A" +crlf+))))

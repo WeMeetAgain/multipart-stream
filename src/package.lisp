@@ -1,7 +1,7 @@
 (cl:in-package #:cl-user)
 
 (defpackage #:multipart-stream
-  (:use #:cl)
+  (:use #:cl #:trivial-gray-streams)
   (:export #:multipart-headers
            #:multipart-stream
 	   #:multipart-use-headers-p

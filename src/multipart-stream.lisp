@@ -9,11 +9,12 @@
 (defgeneric multipart-headers-stream (object))
 
 (defmethod multipart-headers-stream (object)
-  (make-string-input-stream
-   (with-output-to-string (stream)
-     (loop for (key . value) in (multipart-headers object)
-	do (format stream "~A: ~A~A" key value +crlf+))
-     (format stream "~A" +crlf+))))
+  (make-instance 'fast-io:fast-input-stream
+		 :vector (babel:string-to-octets
+			  (with-output-to-string (stream)
+			    (loop for (key . value) in (multipart-headers object)
+			       do (format stream "~A: ~A~A" key value +crlf+))
+			    (format stream "~A" +crlf+)))))
 
 (defun make-multipart-stream (boundary &rest objects)
   (apply #'make-concatenated-stream
